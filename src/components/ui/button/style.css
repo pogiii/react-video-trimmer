@@ -1,0 +1,26 @@
+.button {
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius-sm);
+  background-color: color-mix(
+    in srgb,
+    var(--surface-color) 60%,
+    var(--background-color) 40%
+  );
+  border: solid 1px var(--border-color);
+  color: var(--text-color);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--surface-hover-color);
+}
+
+.button:active {
+  background-color: color-mix(
+    in srgb,
+    var(--surface-hover-color) 60%,
+    var(--background-color) 40%
+  );
+}

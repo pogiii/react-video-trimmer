@@ -1,0 +1,6 @@
+.control-container {
+  display: flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,9 @@
+.control-button {
+  aspect-ratio: 1/1;
+  height: 80%;
+  max-height: 2rem;
+  max-width: 2rem;
+  padding: var(--spacing-1);
+  border-radius: var(--border-radius-sm);
+  border: none;
+}

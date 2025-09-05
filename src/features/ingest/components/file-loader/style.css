@@ -1,0 +1,24 @@
+.file-loader-root {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  backdrop-filter: blur(var(--blur-sm));
+  top: 0;
+  left: 0;
+  text-align: center;
+}
+
+.file-loader-root .card {
+  width: auto;
+  height: auto;
+}
+
+.file-loader-error {
+  color: var(--error-color);
+  background-color: var(--surface-color);
+  padding: var(--spacing-3);
+  border-radius: var(--border-radius-base);
+  border: 1px solid var(--error-color);
+  margin-top: var(--spacing-4);
+  font-size: var(--font-size-sm);
+}
