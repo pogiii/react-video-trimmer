@@ -1,0 +1,122 @@
+.trim-bar {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.trim-bar-input-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+input[type='range'].trim-bar-input {
+  /* Cross-browser appearance reset */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  width: 100%;
+  position: absolute;
+  z-index: var(--z-index-3);
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* WebKit (Chrome, Safari) track styling */
+input[type='range'].trim-bar-input::-webkit-slider-runnable-track {
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* WebKit (Chrome, Safari) thumb styling */
+input[type='range'].trim-bar-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 2px;
+  height: 100%;
+  background-color: var(--warning-color);
+  cursor: pointer;
+  pointer-events: auto;
+  border: none;
+  border-radius: 0;
+  margin-top: 0;
+}
+
+/* Firefox track styling */
+input[type='range'].trim-bar-input::-moz-range-track {
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* Firefox thumb styling */
+input[type='range'].trim-bar-input::-moz-range-thumb {
+  width: 2px;
+  height: 100%;
+  background-color: var(--warning-color);
+  cursor: pointer;
+  pointer-events: auto;
+  border: none;
+  border-radius: 0;
+  /* Remove default Firefox styling */
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Firefox progress styling (remove default) */
+input[type='range'].trim-bar-input::-moz-range-progress {
+  background: transparent;
+}
+
+input[type='range'].trim-bar-input-start {
+  left: 0;
+}
+
+input[type='range'].trim-bar-input-end {
+  direction: rtl;
+  right: 0;
+}
+
+progress.trim-bar-progress {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  /* Cross-browser appearance reset */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+}
+
+progress.trim-bar-progress[value] {
+  background: transparent;
+}
+
+/* WebKit (Chrome, Safari) progress styling */
+progress.trim-bar-progress[value]::-webkit-progress-bar {
+  background: transparent;
+}
+
+progress.trim-bar-progress[value]::-webkit-progress-value {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Firefox progress styling */
+progress.trim-bar-progress[value]::-moz-progress-bar {
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+}
+
+progress.trim-bar-progress-end {
+  direction: rtl;
+}

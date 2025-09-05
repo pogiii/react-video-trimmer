@@ -10,8 +10,9 @@ input[type='range'].timeline-pointer {
   margin: 0;
   cursor: ew-resize;
 
-  /* allow custom styling in WebKit */
+  /* allow custom styling in all browsers */
   -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
 
   /* nicer interactions */
@@ -37,6 +38,9 @@ input[type='range'].timeline-pointer::-moz-range-thumb {
   background: var(--error-color);
   cursor: grab;
   transition: transform 0.1s ease;
+  /* Remove Firefox default styling */
+  -moz-appearance: none;
+  appearance: none;
 }
 input[type='range'].timeline-pointer:active::-moz-range-thumb {
   cursor: grabbing;

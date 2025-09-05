@@ -1,4 +1,4 @@
-import { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { usePlayer } from '../../hooks/use-player';
 import './style.css';
 
@@ -21,7 +21,9 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
     isPlaying,
     volume,
     muted,
-    dispatch /*, range */,
+    dispatch,
+    minStartTime,
+    maxEndTime,
   } = usePlayer();
 
   // ------- Imperative API (stable) -------
@@ -94,9 +96,6 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
     if (!v) return;
 
     const tick = () => {
-      // Optionally clamp to trim range here:
-      // if (range && (v.currentTime > range.end)) v.currentTime = range.start;
-
       dispatch({ type: 'SET_CURRENT_TIME', payload: v.currentTime });
       rafId.current = requestAnimationFrame(tick);
     };
@@ -108,44 +107,39 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
       if (rafId.current != null) cancelAnimationFrame(rafId.current);
       rafId.current = null;
     };
-  }, [isPlaying, dispatch /*, range */]);
+  }, [isPlaying, dispatch, minStartTime, maxEndTime]);
 
   // ------- Video event handlers -------
-  const handleLoadedMetadata = () => {
+  const handleLoadedMetadata = useCallback(() => {
     const v = videoRef.current;
     if (!v) return;
     dispatch({ type: 'SET_DURATION', payload: v.duration });
     dispatch({ type: 'SET_READY', payload: true });
-  };
+  }, [dispatch]);
 
-  const handleTimeUpdate = () => {
-    // Low-frequency fallback; rAF handles smoothness
+  const handleTimeUpdate = useCallback(() => {
     const v = videoRef.current;
     if (!v) return;
     dispatch({ type: 'SET_CURRENT_TIME', payload: v.currentTime });
-  };
+  }, [dispatch]);
 
-  const handlePlay = () => dispatch({ type: 'PLAY' });
-  const handlePause = () => dispatch({ type: 'PAUSE' });
+  const handlePlay = useCallback(() => dispatch({ type: 'PLAY' }), [dispatch]);
+  const handlePause = useCallback(() => dispatch({ type: 'PAUSE' }), [dispatch]);
 
-  const handleLoadStart = () =>
-    dispatch({ type: 'SET_LOADING', payload: true });
-  const handleCanPlay = () => dispatch({ type: 'SET_LOADING', payload: false });
-  const handleWaiting = () => dispatch({ type: 'SET_LOADING', payload: true });
-  const handlePlaying = () => dispatch({ type: 'SET_LOADING', payload: false });
+  const handleLoadStart = useCallback(() =>
+    dispatch({ type: 'SET_LOADING', payload: true }), [dispatch]);
+  const handleCanPlay = useCallback(() => dispatch({ type: 'SET_LOADING', payload: false }), [dispatch]);
+  const handleWaiting = useCallback(() => dispatch({ type: 'SET_LOADING', payload: true }), [dispatch]);
+  const handlePlaying = useCallback(() => dispatch({ type: 'SET_LOADING', payload: false }), [dispatch]);
 
-  const handleEnded = () => {
-    // If you have a trim range and want looping, do it here.
-    // if (range) { videoRef.current!.currentTime = range.start; videoRef.current!.play(); }
-    // else:
+  const handleEnded = useCallback(() => {
     dispatch({ type: 'PAUSE' });
-  };
+  }, [dispatch]);
 
-  const handleError = () => {
+  const handleError = useCallback(() => {
     dispatch({ type: 'SET_LOADING', payload: false });
     dispatch({ type: 'SET_READY', payload: false }); // if you have this action
-    // console.error(...) optionally
-  };
+  }, [dispatch]);
 
   return (
     <div className='video-player-container'>

@@ -1,6 +1,7 @@
 import { Volume2, VolumeX } from 'lucide-react';
 import { ControlButton } from '../control-button';
 import './style.css';
+import { useCallback, useMemo } from 'react';
 
 interface VolumeSliderProps {
   volume: number;
@@ -15,33 +16,35 @@ export const VolumeSlider = ({
   muted = false,
   onMuteToggle,
 }: VolumeSliderProps) => {
-  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSliderChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(event.target.value, 10);
     onVolumeChange(newVolume);
-  };
+  }, [onVolumeChange]);
 
-  const handleMuteToggle = () => {
+  const handleMuteToggle = useCallback(() => {
     if (onMuteToggle) {
       onMuteToggle();
     }
-  };
+  }, [onMuteToggle]);
 
-  const getVolumeIcon = () => {
+  const volumeIcon = useMemo(() => {
     if (muted || volume === 0) {
       return <VolumeX size={16} />;
     }
     return <Volume2 size={16} />;
-  };
+  }, [muted, volume]);
+
+  const displayVolume = muted ? 0 : volume;
 
   return (
     <div className='volume-slider-container'>
-      <ControlButton icon={getVolumeIcon()} onClick={handleMuteToggle} />
+      <ControlButton icon={volumeIcon} onClick={handleMuteToggle} />
       <div className='volume-slider'>
         <input
           type='range'
           min='0'
           max='100'
-          value={muted ? 0 : volume}
+          value={displayVolume}
           onChange={handleSliderChange}
           className='volume-range'
         />

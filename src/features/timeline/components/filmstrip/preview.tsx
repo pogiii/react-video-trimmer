@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Filmstrip } from '.';
 import { useFilmstrip } from '../../hooks/useFilmstrip';
 import './style.css';
@@ -10,18 +10,18 @@ export function FilmstripPreview({ file }: { file: File | null }) {
   const { sprite } = useFilmstrip(file, width);
 
   // Calculate width after component mounts and on resize
-  useEffect(() => {
-    const updateWidth = () => {
-      if (ref.current) {
-        setWidth(ref.current.clientWidth);
-      }
-    };
+  const updateWidth = useCallback(() => {
+    if (ref.current) {
+      setWidth(ref.current.clientWidth);
+    }
+  }, []);
 
+  useEffect(() => {
     updateWidth();
     window.addEventListener('resize', updateWidth);
 
     return () => window.removeEventListener('resize', updateWidth);
-  }, []);
+  }, [updateWidth]);
 
   if (!sprite)
     return (

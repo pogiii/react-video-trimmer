@@ -2,6 +2,7 @@
 import { Card } from '../../../../components/ui/card';
 import { formatTimeToMMSS } from '../../../../utils/time';
 import './style.css';
+import { useMemo, memo } from 'react';
 
 const Root = ({ children }: { children: React.ReactNode }) => {
   return <Card className='timeline-root flex flex-col gap-1'>{children}</Card>;
@@ -28,20 +29,24 @@ interface TimeProps {
   duration: number;
 }
 
-const Time = ({ currentTime, duration }: TimeProps) => {
-  const parsedCurrentTime = formatTimeToMMSS(currentTime);
-  const parsedDuration = formatTimeToMMSS(duration);
+const Time = memo(({ currentTime, duration }: TimeProps) => {
+  const parsedCurrentTime = useMemo(() => formatTimeToMMSS(currentTime), [currentTime]);
+  const parsedDuration = useMemo(() => formatTimeToMMSS(duration), [duration]);
 
   return (
     <div className='timeline-duration-currentTime flex justify-end items-center'>
       {parsedCurrentTime}/{parsedDuration}
     </div>
   );
-};
+});
 
-const Title = ({ title }: { title: string }) => (
+Time.displayName = 'Time';
+
+const Title = memo(({ title }: { title: string }) => (
   <div className='timeline-title flex justify-start items-center'>{title}</div>
-);
+));
+
+Title.displayName = 'Title';
 
 export const Timeline = {
   Root,

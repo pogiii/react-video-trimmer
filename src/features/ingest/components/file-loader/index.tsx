@@ -2,7 +2,7 @@ import './style.css';
 import { Card } from '../../../../components/ui/card';
 import { FileDragArea } from '../../../../components/ui/file-drag-area';
 import { validateVideoFiles } from '../../lib/file-validation';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 type FileLoaderProps = {
   whenFileAvailable?: (files: FileList) => void;
@@ -11,7 +11,7 @@ type FileLoaderProps = {
 export function FileLoader({ whenFileAvailable }: FileLoaderProps) {
   const [error, setError] = useState<string | null>(null);
 
-  const handleFileChange = (files: FileList) => {
+  const handleFileChange = useCallback((files: FileList) => {
     const validationResult = validateVideoFiles(files);
     if (!validationResult.isValid) {
       setError(validationResult.error ? 'Invalid file' : null);
@@ -20,7 +20,7 @@ export function FileLoader({ whenFileAvailable }: FileLoaderProps) {
       setError(null);
     }
     whenFileAvailable?.(files);
-  };
+  }, [whenFileAvailable]);
 
   return (
     <div className='file-loader-root flex justify-center items-center'>

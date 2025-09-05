@@ -1,23 +1,30 @@
-import type { Filmstrip } from '../../types/filmstrip';
+import type { Filmstrip as FilmstripType } from '../../types/filmstrip';
+import { useMemo, memo } from 'react';
 
-export function Filmstrip({
+export const Filmstrip = memo(function Filmstrip({
   sprite,
   width,
 }: {
-  sprite: Filmstrip | null;
+  sprite: FilmstripType | null;
   width: number;
 }) {
+  const cells = useMemo(() => {
+    if (!sprite) return [];
+    return Array.from({ length: sprite.cols });
+  }, [sprite]);
+
+  const styleGrid: React.CSSProperties = useMemo(() => {
+    if (!sprite) return {};
+    return {
+      display: 'grid',
+      gridTemplateColumns: `repeat(${sprite.cols}, ${sprite.tileW}px)`,
+      gridAutoRows: `${sprite.tileH}px`,
+      width,
+      overflow: 'hidden',
+    };
+  }, [sprite, width]);
+
   if (!sprite) return null;
-
-  const cells = Array.from({ length: sprite.cols });
-
-  const styleGrid: React.CSSProperties = {
-    display: 'grid',
-    gridTemplateColumns: `repeat(${sprite.cols}, ${sprite.tileW}px)`,
-    gridAutoRows: `${sprite.tileH}px`,
-    width,
-    overflow: 'hidden',
-  };
 
   return (
     <div style={styleGrid}>
@@ -36,4 +43,4 @@ export function Filmstrip({
       ))}
     </div>
   );
-}
+});

@@ -11,6 +11,8 @@ import { ControlContainer } from '../features/controls';
 
 import { FilmstripPreview } from '../features/timeline/components/filmstrip/preview';
 import { Pointer } from '../features/timeline/components/pointer';
+import { TrimBar } from '../features/timeline/components/trim-bar';
+import { useEffect, useCallback } from 'react';
 
 function App() {
   const {
@@ -26,28 +28,31 @@ function App() {
     minStartTime,
   } = usePlayer();
 
-  const handlePlay = () => {
+  useEffect(() => {
+  }, [currentTime]);
+
+  const handlePlay = useCallback(() => {
     dispatch({ type: 'PLAY' });
-  };
+  }, [dispatch]);
 
-  const handlePause = () => {
+  const handlePause = useCallback(() => {
     dispatch({ type: 'PAUSE' });
-  };
+  }, [dispatch]);
 
-  const handleVolumeChange = (newVolume: number) => {
+  const handleVolumeChange = useCallback((newVolume: number) => {
     dispatch({ type: 'SET_VOLUME', payload: newVolume });
-  };
+  }, [dispatch]);
 
-  const handleMuteToggle = () => {
+  const handleMuteToggle = useCallback(() => {
     dispatch({ type: 'TOGGLE_MUTE' });
-  };
+  }, [dispatch]);
 
-    const handlePointerInput = (event: React.FormEvent<HTMLInputElement>) => {
+  const handlePointerInput = useCallback((event: React.FormEvent<HTMLInputElement>) => {
     const newTime = parseFloat(event.currentTarget.value);
     dispatch({ type: 'SET_CURRENT_TIME', payload: newTime });
-  };
+  }, [dispatch]);
 
-  const handleFullscreen = () => {
+  const handleFullscreen = useCallback(() => {
     const videoElement = document.querySelector('video');
     if (videoElement) {
       if (document.fullscreenElement) {
@@ -56,24 +61,46 @@ function App() {
         videoElement.requestFullscreen();
       }
     }
-  };
+  }, []);
 
-  const handlePointerStart = () => {
+  const handlePointerStart = useCallback(() => {
     dispatch({ type: 'PAUSE' });
-  };
+  }, [dispatch]);
 
-  const handlePointerEnd = () => {
+  const handlePointerEnd = useCallback(() => {
     dispatch({ type: 'PLAY' });
-  };
+  }, [dispatch]);
+
+  const handleStartChange = useCallback((value: number) => {
+    console.log('handleStartChange:', value);
+    dispatch({ type: 'SET_TRIM_BOUNDS', payload: { minStartTime: value, maxEndTime: maxEndTime } });
+
+    if (currentTime < value) {
+      dispatch({ type: 'SET_CURRENT_TIME', payload: value });
+    }
+  }, [dispatch, maxEndTime, currentTime]);
+
+  const handleEndChange = useCallback((value: number) => {
+    console.log('handleEndChange:', value);
+    dispatch({ type: 'SET_TRIM_BOUNDS', payload: { minStartTime: minStartTime, maxEndTime: value } });
+
+    console.log('currentTime:', currentTime);
+
+    if (currentTime > value) {
+      dispatch({ type: 'SET_CURRENT_TIME', payload: duration - value });
+    }
+  }, [dispatch, minStartTime, currentTime, duration]);
+
+  const handleFileAvailable = useCallback((files: FileList) => {
+    const url = loadFile(files[0]) ?? '';
+    dispatch({ type: 'LOAD_VIDEO', payload: { url, file: files[0] } });
+  }, [dispatch]);
 
   return (
     <AppLayout>
       {!video && (
         <FileLoader
-          whenFileAvailable={files => {
-            const url = loadFile(files[0]) ?? '';
-            dispatch({ type: 'LOAD_VIDEO', payload: { url, file: files[0] } });
-          }}
+          whenFileAvailable={handleFileAvailable}
         />
       )}
       {video && (
@@ -110,10 +137,15 @@ function App() {
             <Timeline.Body>
               {file && (
                 <>
+                  <TrimBar
+                    onStartChange={handleStartChange}
+                    onEndChange={handleEndChange}
+                    maxDuration={duration}
+                  />
                   <FilmstripPreview file={file} />
                   <Pointer
-                    min={minStartTime}
-                    max={maxEndTime}
+                    min={0}
+                    max={duration}
                     step={0.05}
                     value={currentTime}
                     onInput={handlePointerInput}
