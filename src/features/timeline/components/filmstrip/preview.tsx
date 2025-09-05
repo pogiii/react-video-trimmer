@@ -25,7 +25,7 @@ export function FilmstripPreview({ file }: { file: File | null }) {
   
   if (!sprite) return (
     <div ref={ref} className="filmstrip-preview-generating flex gap-2 justify-center items-center">
-      <Loader2 className="w-4 h-4 animate-spin" />
+      <Loader2 className="animate-spin" />
       <span>Generating preview...</span>
     </div>
   );
