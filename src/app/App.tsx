@@ -46,17 +46,12 @@ function App() {
   const handlePointerInput = useCallback((event: React.FormEvent<HTMLInputElement>) => {
     const newTime = parseFloat(event.currentTarget.value);
 
-    if (newTime < minStartTime) {
-      console.log('newTime < minStartTime', newTime, minStartTime);
-      return;
-    }
-    if (newTime > maxEndTime) {
-      console.log('newTime > maxEndTime', newTime, maxEndTime);
+    if (newTime < minStartTime || newTime > maxEndTime) {
       return;
     }
 
     dispatch({ type: 'SET_CURRENT_TIME', payload: newTime });
-  }, [dispatch]);
+  }, [dispatch, minStartTime, maxEndTime]);
 
   const handleFullscreen = useCallback(() => {
     const videoElement = document.querySelector('video');
@@ -78,13 +73,12 @@ function App() {
   }, [dispatch]);
 
   const handleStartChange = useCallback((value: number) => {
-    console.log('handleStartChange:', value);
     dispatch({ type: 'SET_TRIM_BOUNDS', payload: { minStartTime: value, maxEndTime: maxEndTime } });
-  }, [dispatch, maxEndTime, currentTime]);
+  }, [dispatch, maxEndTime]);
 
   const handleEndChange = useCallback((value: number) => {
     dispatch({ type: 'SET_TRIM_BOUNDS', payload: { minStartTime: minStartTime, maxEndTime: duration - value } });
-  }, [dispatch, minStartTime, currentTime, duration]);
+  }, [dispatch, minStartTime, duration]);
 
   const handleFileAvailable = useCallback((files: FileList) => {
     const url = loadFile(files[0]) ?? '';

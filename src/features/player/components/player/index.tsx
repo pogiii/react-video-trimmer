@@ -43,9 +43,6 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
 
 
   useEffect(() => {
-    console.log("maxEndTime", maxEndTime);
-    console.log("minStartTime", minStartTime);
-    console.log("currentTime", currentTime);
 
     if (maxEndTime < currentTime) {
       dispatch({ type: 'PAUSE' });
