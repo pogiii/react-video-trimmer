@@ -11,9 +11,26 @@ import { ControlContainer } from '../features/controls';
 
 import { FilmstripPreview } from '../features/timeline/components/filmstrip/preview';
 import { Pointer } from '../features/timeline/components/pointer';
+import { debounce } from '../utils/debounce';
+import { useState } from 'react';
+import { Trimmer } from '../features/timeline/components/trimmer';
 
 function App() {
-  const { dispatch, video, file, currentTime, duration, isPlaying, volume, muted, maxEndTime, minStartTime } = usePlayer();
+  const {
+    dispatch,
+    video,
+    file,
+    currentTime,
+    duration,
+    isPlaying,
+    volume,
+    muted,
+    maxEndTime,
+    minStartTime,
+  } = usePlayer();
+
+  const [minValue, setMinValue] = useState(30);
+  const [maxValue, setMaxValue] = useState(40);
 
   const handlePlay = () => {
     dispatch({ type: 'PLAY' });
@@ -32,7 +49,7 @@ function App() {
   };
 
   const handlePointerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = parseFloat(event.target.value);    
+    const newTime = parseFloat(event.target.value);
     dispatch({ type: 'SET_CURRENT_TIME', payload: newTime });
   };
 
@@ -47,21 +64,23 @@ function App() {
     }
   };
 
-  const handlePointerStart = () => {
+  const handlePointerStart = debounce(() => {
     dispatch({ type: 'PAUSE' });
-  };
+  }, 20);
 
-  const handlePointerEnd = () => {
+  const handlePointerEnd = debounce(() => {
     dispatch({ type: 'PLAY' });
-  };
+  }, 20);
 
   return (
     <AppLayout>
       {!video && (
-        <FileLoader whenFileAvailable={(files) => {
-          const url = loadFile(files[0]) ?? '';
-          dispatch({ type: 'LOAD_VIDEO', payload: { url, file: files[0] } });
-        }} />
+        <FileLoader
+          whenFileAvailable={files => {
+            const url = loadFile(files[0]) ?? '';
+            dispatch({ type: 'LOAD_VIDEO', payload: { url, file: files[0] } });
+          }}
+        />
       )}
       {video && (
         <>
@@ -71,33 +90,46 @@ function App() {
               <Timeline.Title title={file?.name ?? ''} />
               <ControlContainer>
                 {!isPlaying ? (
-                  <Controls.Button icon={<Play size={16} />} onClick={handlePlay} />
+                  <Controls.Button
+                    icon={<Play size={16} />}
+                    onClick={handlePlay}
+                  />
                 ) : (
-                  <Controls.Button icon={<Pause size={16} />} onClick={handlePause} />
+                  <Controls.Button
+                    icon={<Pause size={16} />}
+                    onClick={handlePause}
+                  />
                 )}
-                <Controls.Button icon={<FullscreenIcon size={16}/>} onClick={handleFullscreen} />
-                <Controls.VolumeSlider 
-                  volume={volume} 
+                <Controls.Button
+                  icon={<FullscreenIcon size={16} />}
+                  onClick={handleFullscreen}
+                />
+                <Controls.VolumeSlider
+                  volume={volume}
                   muted={muted}
-                  onVolumeChange={handleVolumeChange} 
+                  onVolumeChange={handleVolumeChange}
                   onMuteToggle={handleMuteToggle}
                 />
               </ControlContainer>
               <Timeline.Time currentTime={currentTime} duration={duration} />
             </Timeline.Header>
             <Timeline.Body>
-              {file && <FilmstripPreview file={file} />}
-              <Pointer 
-                min={minStartTime} 
-                max={maxEndTime} 
-                step={0.05} 
-                value={currentTime} 
-                onChange={handlePointerChange} 
-                onMouseDown={handlePointerStart}
-                onMouseUp={handlePointerEnd}
-                onTouchStart={handlePointerStart}
-                onTouchEnd={handlePointerEnd}
-              />
+              {file && (
+                <>
+                  <FilmstripPreview file={file} />
+                  <Pointer
+                    min={minStartTime}
+                    max={maxEndTime}
+                    step={0.05}
+                    value={currentTime}
+                    onChange={handlePointerChange}
+                    onMouseDown={handlePointerStart}
+                    onMouseUp={handlePointerEnd}
+                    onTouchStart={handlePointerStart}
+                    onTouchEnd={handlePointerEnd}
+                  />
+                </>
+              )}
             </Timeline.Body>
           </Timeline.Root>
         </>

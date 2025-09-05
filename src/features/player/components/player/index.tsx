@@ -1,6 +1,6 @@
-import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
-import { usePlayer } from "../../hooks/use-player";
-import "./style.css";
+import { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { usePlayer } from '../../hooks/use-player';
+import './style.css';
 
 export interface PlayerRef {
   play: () => void;
@@ -15,7 +15,14 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const rafId = useRef<number | null>(null);
 
-  const { video, currentTime, isPlaying, volume, muted, dispatch /*, range */ } = usePlayer();
+  const {
+    video,
+    currentTime,
+    isPlaying,
+    volume,
+    muted,
+    dispatch /*, range */,
+  } = usePlayer();
 
   // ------- Imperative API (stable) -------
   useImperativeHandle(
@@ -39,10 +46,10 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
     if (!v) return;
 
     // Reset derived state when src changes
-    dispatch({ type: "SET_READY", payload: false });
-    dispatch({ type: "SET_DURATION", payload: 0 });
-    dispatch({ type: "SET_CURRENT_TIME", payload: 0 });
-    dispatch({ type: "SET_LOADING", payload: !!video });
+    dispatch({ type: 'SET_READY', payload: false });
+    dispatch({ type: 'SET_DURATION', payload: 0 });
+    dispatch({ type: 'SET_CURRENT_TIME', payload: 0 });
+    dispatch({ type: 'SET_LOADING', payload: !!video });
 
     // Force the media pipeline to re-evaluate source
     v.load();
@@ -90,7 +97,7 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
       // Optionally clamp to trim range here:
       // if (range && (v.currentTime > range.end)) v.currentTime = range.start;
 
-      dispatch({ type: "SET_CURRENT_TIME", payload: v.currentTime });
+      dispatch({ type: 'SET_CURRENT_TIME', payload: v.currentTime });
       rafId.current = requestAnimationFrame(tick);
     };
 
@@ -107,45 +114,46 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
   const handleLoadedMetadata = () => {
     const v = videoRef.current;
     if (!v) return;
-    dispatch({ type: "SET_DURATION", payload: v.duration });
-    dispatch({ type: "SET_READY", payload: true });
+    dispatch({ type: 'SET_DURATION', payload: v.duration });
+    dispatch({ type: 'SET_READY', payload: true });
   };
 
   const handleTimeUpdate = () => {
     // Low-frequency fallback; rAF handles smoothness
     const v = videoRef.current;
     if (!v) return;
-    dispatch({ type: "SET_CURRENT_TIME", payload: v.currentTime });
+    dispatch({ type: 'SET_CURRENT_TIME', payload: v.currentTime });
   };
 
-  const handlePlay = () => dispatch({ type: "PLAY" });
-  const handlePause = () => dispatch({ type: "PAUSE" });
+  const handlePlay = () => dispatch({ type: 'PLAY' });
+  const handlePause = () => dispatch({ type: 'PAUSE' });
 
-  const handleLoadStart = () => dispatch({ type: "SET_LOADING", payload: true });
-  const handleCanPlay = () => dispatch({ type: "SET_LOADING", payload: false });
-  const handleWaiting = () => dispatch({ type: "SET_LOADING", payload: true });
-  const handlePlaying = () => dispatch({ type: "SET_LOADING", payload: false });
+  const handleLoadStart = () =>
+    dispatch({ type: 'SET_LOADING', payload: true });
+  const handleCanPlay = () => dispatch({ type: 'SET_LOADING', payload: false });
+  const handleWaiting = () => dispatch({ type: 'SET_LOADING', payload: true });
+  const handlePlaying = () => dispatch({ type: 'SET_LOADING', payload: false });
 
   const handleEnded = () => {
     // If you have a trim range and want looping, do it here.
     // if (range) { videoRef.current!.currentTime = range.start; videoRef.current!.play(); }
     // else:
-    dispatch({ type: "PAUSE" });
+    dispatch({ type: 'PAUSE' });
   };
 
   const handleError = () => {
-    dispatch({ type: "SET_LOADING", payload: false });
-    dispatch({ type: "SET_READY", payload: false }); // if you have this action
+    dispatch({ type: 'SET_LOADING', payload: false });
+    dispatch({ type: 'SET_READY', payload: false }); // if you have this action
     // console.error(...) optionally
   };
 
   return (
-    <div className="video-player-container">
+    <div className='video-player-container'>
       <video
         ref={videoRef}
-        className="video-player"
+        className='video-player'
         src={video ?? undefined}
-        preload="metadata"
+        preload='metadata'
         playsInline
         // media events
         onLoadedMetadata={handleLoadedMetadata}
@@ -163,4 +171,4 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
   );
 });
 
-Player.displayName = "Player";
+Player.displayName = 'Player';

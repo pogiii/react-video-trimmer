@@ -1,4 +1,4 @@
-import { useRef, useState, createContext, useContext } from "react";
+import { useRef, useState, createContext, useContext } from 'react';
 import './style.css';
 
 // Context for sharing state between composed components
@@ -13,12 +13,16 @@ interface FileDragAreaContextValue {
   onFileChange?: (files: FileList) => void;
 }
 
-const FileDragAreaContext = createContext<FileDragAreaContextValue | null>(null);
+const FileDragAreaContext = createContext<FileDragAreaContextValue | null>(
+  null
+);
 
 const useFileDragArea = () => {
   const context = useContext(FileDragAreaContext);
   if (!context) {
-    throw new Error('FileDragArea components must be used within FileDragArea.Root');
+    throw new Error(
+      'FileDragArea components must be used within FileDragArea.Root'
+    );
   }
   return context;
 };
@@ -29,7 +33,12 @@ interface FileDragAreaRootProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-const FileDragAreaRoot = ({ className, children, onFileChange, ...props }: FileDragAreaRootProps) => {
+const FileDragAreaRoot = ({
+  className,
+  children,
+  onFileChange,
+  ...props
+}: FileDragAreaRootProps) => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -84,21 +93,27 @@ const FileDragAreaRoot = ({ className, children, onFileChange, ...props }: FileD
 };
 
 // Trigger component that handles clicks to open file dialog
-interface FileDragAreaTriggerProps extends React.HTMLAttributes<HTMLDivElement> {
+interface FileDragAreaTriggerProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-const FileDragAreaTrigger = ({ className, children, onClick, ...props }: FileDragAreaTriggerProps) => {
+const FileDragAreaTrigger = ({
+  className,
+  children,
+  onClick,
+  ...props
+}: FileDragAreaTriggerProps) => {
   const { handleClick } = useFileDragArea();
 
   return (
     <div
       className={`file-drag-area-trigger ${className ?? ''}`}
-      onClick={(e) => {
+      onClick={e => {
         handleClick();
         onClick?.(e);
       }}
-      role="button"
+      role='button'
       tabIndex={0}
       {...props}
     >
@@ -108,7 +123,8 @@ const FileDragAreaTrigger = ({ className, children, onClick, ...props }: FileDra
 };
 
 // Input component that renders the hidden file input
-interface FileDragAreaInputProps extends Omit<React.HTMLProps<HTMLInputElement>, 'type' | 'onChange'> {
+interface FileDragAreaInputProps
+  extends Omit<React.HTMLProps<HTMLInputElement>, 'type' | 'onChange'> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -125,9 +141,9 @@ const FileDragAreaInput = ({ onChange, ...props }: FileDragAreaInputProps) => {
 
   return (
     <input
-      type="file"
+      type='file'
       ref={fileInputRef}
-      className="hidden"
+      className='hidden'
       onChange={handleFileChange}
       {...props}
     />
@@ -135,11 +151,16 @@ const FileDragAreaInput = ({ onChange, ...props }: FileDragAreaInputProps) => {
 };
 
 // Content component for displaying content inside the drag area
-interface FileDragAreaContentProps extends React.HTMLAttributes<HTMLDivElement> {
+interface FileDragAreaContentProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-const FileDragAreaContent = ({ className, children, ...props }: FileDragAreaContentProps) => {
+const FileDragAreaContent = ({
+  className,
+  children,
+  ...props
+}: FileDragAreaContentProps) => {
   return (
     <div className={`file-drag-area-content ${className ?? ''}`} {...props}>
       {children}
@@ -148,16 +169,17 @@ const FileDragAreaContent = ({ className, children, ...props }: FileDragAreaCont
 };
 
 // Message component for displaying drag state messages
-interface FileDragAreaMessageProps extends React.HTMLAttributes<HTMLParagraphElement> {
+interface FileDragAreaMessageProps
+  extends React.HTMLAttributes<HTMLParagraphElement> {
   dragMessage?: string;
   defaultMessage?: string;
 }
 
-const FileDragAreaMessage = ({ 
-  className, 
-  dragMessage = 'Release to upload', 
+const FileDragAreaMessage = ({
+  className,
+  dragMessage = 'Release to upload',
   defaultMessage = 'Drop a video here or click to choose',
-  ...props 
+  ...props
 }: FileDragAreaMessageProps) => {
   const { isDragging } = useFileDragArea();
 
@@ -179,11 +201,17 @@ export const FileDragArea = {
 };
 
 // Legacy component for backward compatibility
-interface LegacyFileDragAreaProps extends Omit<React.HTMLProps<HTMLInputElement>, 'type'> {
+interface LegacyFileDragAreaProps
+  extends Omit<React.HTMLProps<HTMLInputElement>, 'type'> {
   whenFileAvailable?: (files: FileList) => void;
 }
 
-export const LegacyFileDragArea = ({ className, children, whenFileAvailable, ...props }: LegacyFileDragAreaProps) => {
+export const LegacyFileDragArea = ({
+  className,
+  children,
+  whenFileAvailable,
+  ...props
+}: LegacyFileDragAreaProps) => {
   return (
     <FileDragArea.Root className={className} onFileChange={whenFileAvailable}>
       <FileDragArea.Input {...props} />

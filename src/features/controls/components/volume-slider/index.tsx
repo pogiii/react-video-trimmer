@@ -9,11 +9,11 @@ interface VolumeSliderProps {
   onMuteToggle?: () => void;
 }
 
-export const VolumeSlider = ({ 
-  volume, 
-  onVolumeChange, 
-  muted = false, 
-  onMuteToggle 
+export const VolumeSlider = ({
+  volume,
+  onVolumeChange,
+  muted = false,
+  onMuteToggle,
 }: VolumeSliderProps) => {
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(event.target.value, 10);
@@ -34,21 +34,18 @@ export const VolumeSlider = ({
   };
 
   return (
-    <div className="volume-slider-container">
-      <ControlButton
-        icon={getVolumeIcon()}
-        onClick={handleMuteToggle}
-      />
-      <div className="volume-slider">
+    <div className='volume-slider-container'>
+      <ControlButton icon={getVolumeIcon()} onClick={handleMuteToggle} />
+      <div className='volume-slider'>
         <input
-          type="range"
-          min="0"
-          max="100"
+          type='range'
+          min='0'
+          max='100'
           value={muted ? 0 : volume}
           onChange={handleSliderChange}
-          className="volume-range"
+          className='volume-range'
         />
       </div>
     </div>
   );
-}; 
+};

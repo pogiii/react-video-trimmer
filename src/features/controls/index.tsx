@@ -5,7 +5,7 @@ import { VolumeSlider } from './components/volume-slider';
 // Export control components
 export { ControlButton } from './components/control-button';
 export { ControlContainer } from './components/control-container';
-export { VolumeSlider } from './components/volume-slider'; 
+export { VolumeSlider } from './components/volume-slider';
 
 const Controls = {
   Button: ControlButton,
@@ -13,4 +13,4 @@ const Controls = {
   VolumeSlider: VolumeSlider,
 };
 
-export {Controls};
+export { Controls };

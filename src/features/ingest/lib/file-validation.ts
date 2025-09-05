@@ -20,7 +20,7 @@ export const SUPPORTED_VIDEO_EXTENSIONS = [
   '.rm',
   '.rmvb',
   '.divx',
-  '.xvid'
+  '.xvid',
 ] as const;
 
 /**
@@ -42,9 +42,8 @@ export const SUPPORTED_VIDEO_MIME_TYPES = [
   'video/x-ms-asf',
   'video/vnd.rn-realvideo',
   'video/x-divx',
-  'video/x-msvideo'
+  'video/x-msvideo',
 ] as const;
-
 
 /**
  * Validation result interface
@@ -59,46 +58,53 @@ export interface FileValidationResult {
  * @param file - The file to validate
  * @returns Validation result with isValid flag and optional error message
  */
-export function validateVideoFile(file: File, supportedExtensions: readonly string[], supportedMimeTypes: readonly string[]): FileValidationResult {
+export function validateVideoFile(
+  file: File,
+  supportedExtensions: readonly string[],
+  supportedMimeTypes: readonly string[]
+): FileValidationResult {
   // Check if file exists
   if (!file) {
     return {
       isValid: false,
-      error: true
+      error: true,
     };
   }
 
   // Check file size
 
-
   // Check if file is empty
   if (file.size === 0) {
     return {
       isValid: false,
-      error: true
+      error: true,
     };
   }
 
   // Get file extension
   const fileName = file.name.toLowerCase();
   const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
-  
+
   // Check file extension
-  const hasValidExtension = supportedExtensions.includes(fileExtension as (typeof supportedExtensions)[number]);
-  
+  const hasValidExtension = supportedExtensions.includes(
+    fileExtension as (typeof supportedExtensions)[number]
+  );
+
   // Check MIME type
-  const hasValidMimeType = supportedMimeTypes.includes(file.type as (typeof supportedMimeTypes)[number]);
-  
+  const hasValidMimeType = supportedMimeTypes.includes(
+    file.type as (typeof supportedMimeTypes)[number]
+  );
+
   // File is valid if it has either a valid extension or MIME type
   if (!hasValidExtension && !hasValidMimeType) {
     return {
       isValid: false,
-      error: true
+      error: true,
     };
   }
 
   return {
-    isValid: true
+    isValid: true,
   };
 }
 
@@ -107,25 +113,33 @@ export function validateVideoFile(file: File, supportedExtensions: readonly stri
  * @param files - FileList or array of files to validate
  * @returns Validation result for the first invalid file, or success if all are valid
  */
-export function validateVideoFiles(files: FileList | File[], supportedExtensions: readonly string[] = SUPPORTED_VIDEO_EXTENSIONS, supportedMimeTypes: readonly string[] = SUPPORTED_VIDEO_MIME_TYPES): FileValidationResult {
+export function validateVideoFiles(
+  files: FileList | File[],
+  supportedExtensions: readonly string[] = SUPPORTED_VIDEO_EXTENSIONS,
+  supportedMimeTypes: readonly string[] = SUPPORTED_VIDEO_MIME_TYPES
+): FileValidationResult {
   const fileArray = Array.from(files);
-  
+
   if (fileArray.length === 0) {
     return {
       isValid: false,
-      error: true
+      error: true,
     };
   }
 
   // Check each file
   for (const file of fileArray) {
-    const result = validateVideoFile(file, supportedExtensions, supportedMimeTypes);
+    const result = validateVideoFile(
+      file,
+      supportedExtensions,
+      supportedMimeTypes
+    );
     if (!result.isValid) {
       return result;
     }
   }
 
   return {
-    isValid: true
+    isValid: true,
   };
 }

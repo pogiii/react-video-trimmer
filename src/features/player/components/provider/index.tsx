@@ -1,6 +1,6 @@
-import { useReducer } from "react";
-import { PlayerContext, playerReducer } from "../../context";
-import type { PlayerState } from "../../types/player-state";
+import { useReducer } from 'react';
+import { PlayerContext, playerReducer } from '../../context';
+import type { PlayerState } from '../../types/player-state';
 
 const initialState: PlayerState = {
   video: null,
@@ -19,5 +19,9 @@ const initialState: PlayerState = {
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(playerReducer, initialState);
 
-  return <PlayerContext.Provider value={{ ...state, dispatch }}>{children}</PlayerContext.Provider>;
+  return (
+    <PlayerContext.Provider value={{ ...state, dispatch }}>
+      {children}
+    </PlayerContext.Provider>
+  );
 };

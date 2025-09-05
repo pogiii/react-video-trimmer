@@ -4,21 +4,23 @@ import { formatTimeToMMSS } from '../../../../utils/time';
 import './style.css';
 
 const Root = ({ children }: { children: React.ReactNode }) => {
-  return <Card className="timeline-root flex flex-col gap-1">{children}</Card>;
+  return <Card className='timeline-root flex flex-col gap-1'>{children}</Card>;
 };
-
 
 const Body = ({ children }: { children: React.ReactNode }) => {
-  return <div className="timeline-body flex justify-center items-center">
-    {children}
-  </div>
+  return (
+    <div className='timeline-body flex justify-center items-center'>
+      {children}
+    </div>
+  );
 };
 
-
 const Header = ({ children }: { children: React.ReactNode }) => {
-  return <div className="timeline-header flex justify-between items-center text-sm">
-    {children}
-  </div>;
+  return (
+    <div className='timeline-header flex justify-between items-center text-sm'>
+      {children}
+    </div>
+  );
 };
 
 interface TimeProps {
@@ -27,19 +29,19 @@ interface TimeProps {
 }
 
 const Time = ({ currentTime, duration }: TimeProps) => {
-  
   const parsedCurrentTime = formatTimeToMMSS(currentTime);
   const parsedDuration = formatTimeToMMSS(duration);
 
-  return(<div className="timeline-duration-currentTime flex justify-end items-center">
-    {parsedCurrentTime}/{parsedDuration}
-  </div>)
-}
+  return (
+    <div className='timeline-duration-currentTime flex justify-end items-center'>
+      {parsedCurrentTime}/{parsedDuration}
+    </div>
+  );
+};
 
 const Title = ({ title }: { title: string }) => (
-  <div className="timeline-title flex justify-start items-center">{title}</div>
-)
-
+  <div className='timeline-title flex justify-start items-center'>{title}</div>
+);
 
 export const Timeline = {
   Root,

@@ -1,7 +1,6 @@
-import { createContext } from "react";
-import type { PlayerState } from "../types/player-state";
-import type { PlayerAction } from "../types/player-action";
-
+import { createContext } from 'react';
+import type { PlayerState } from '../types/player-state';
+import type { PlayerAction } from '../types/player-action';
 
 // Updated context type with dispatch
 export type PlayerContextType = PlayerState & {
@@ -24,7 +23,10 @@ export const initialPlayerState: PlayerState = {
 };
 
 // Player reducer
-export const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
+export const playerReducer = (
+  state: PlayerState,
+  action: PlayerAction
+): PlayerState => {
   switch (action.type) {
     case 'LOAD_VIDEO':
       return {

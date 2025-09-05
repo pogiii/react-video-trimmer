@@ -6,10 +6,9 @@ import { useState } from 'react';
 
 type FileLoaderProps = {
   whenFileAvailable?: (files: FileList) => void;
-}
+};
 
 export function FileLoader({ whenFileAvailable }: FileLoaderProps) {
-
   const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (files: FileList) => {
@@ -27,7 +26,9 @@ export function FileLoader({ whenFileAvailable }: FileLoaderProps) {
     <div className='file-loader-root flex justify-center items-center'>
       <Card className='flex flex-col gap-1 justify-center items-center'>
         <div className='flex flex-col gap-1'>
-          <h1 className='heading-primary text-2xl'>Welcome to React Video Trimmer</h1>
+          <h1 className='heading-primary text-2xl'>
+            Welcome to React Video Trimmer
+          </h1>
           <div className='flex flex-col gap-1'>
             <FileDragArea.Root onFileChange={handleFileChange}>
               <FileDragArea.Input accept='video/*' />

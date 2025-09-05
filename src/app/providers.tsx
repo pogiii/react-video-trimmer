@@ -1,9 +1,13 @@
-import { PlayerProvider } from "../features/player/components/provider";
+import { PlayerProvider } from '../features/player/components/provider';
 
 export default function Providers({
   children,
 }: {
   children?: React.ReactNode;
 }) {
-  return <PlayerProvider><>{children}</></PlayerProvider>;
+  return (
+    <PlayerProvider>
+      <>{children}</>
+    </PlayerProvider>
+  );
 }
