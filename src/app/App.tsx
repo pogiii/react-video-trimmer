@@ -1,3 +1,4 @@
+import './App.css';
 import { FullscreenIcon, Pause, Play } from 'lucide-react';
 import { AppLayout } from '../components/layouts/app-layout';
 import { Controls } from '../features/controls/';
@@ -5,13 +6,8 @@ import { FileLoader } from '../features/ingest/components/file-loader';
 import { loadFile } from '../features/ingest/lib/load-file';
 import { Player } from '../features/player';
 import { usePlayer } from '../features/player';
-import { Timeline } from '../features/timeline/components/timeline';
-import './App.css';
-import { ControlContainer } from '../features/controls';
-
-import { FilmstripPreview } from '../features/timeline/components/filmstrip/preview';
-import { Pointer } from '../features/timeline/components/pointer';
-import { TrimBar } from '../features/timeline/components/trim-bar';
+import { Timeline } from '../features/timeline/';
+import { ControlContainer } from '../features/controls';;
 import { useEffect, useCallback } from 'react';
 
 function App() {
@@ -74,21 +70,10 @@ function App() {
   const handleStartChange = useCallback((value: number) => {
     console.log('handleStartChange:', value);
     dispatch({ type: 'SET_TRIM_BOUNDS', payload: { minStartTime: value, maxEndTime: maxEndTime } });
-
-    if (currentTime < value) {
-      dispatch({ type: 'SET_CURRENT_TIME', payload: value });
-    }
   }, [dispatch, maxEndTime, currentTime]);
 
   const handleEndChange = useCallback((value: number) => {
-    console.log('handleEndChange:', value);
-    dispatch({ type: 'SET_TRIM_BOUNDS', payload: { minStartTime: minStartTime, maxEndTime: value } });
-
-    console.log('currentTime:', currentTime);
-
-    if (currentTime > value) {
-      dispatch({ type: 'SET_CURRENT_TIME', payload: duration - value });
-    }
+    dispatch({ type: 'SET_TRIM_BOUNDS', payload: { minStartTime: minStartTime, maxEndTime: duration - value } });
   }, [dispatch, minStartTime, currentTime, duration]);
 
   const handleFileAvailable = useCallback((files: FileList) => {
@@ -137,13 +122,13 @@ function App() {
             <Timeline.Body>
               {file && (
                 <>
-                  <TrimBar
+                  <Timeline.TrimBar
                     onStartChange={handleStartChange}
                     onEndChange={handleEndChange}
                     maxDuration={duration}
                   />
-                  <FilmstripPreview file={file} />
-                  <Pointer
+                  <Timeline.FilmstripPreview file={file} />
+                  <Timeline.Pointer
                     min={0}
                     max={duration}
                     step={0.05}

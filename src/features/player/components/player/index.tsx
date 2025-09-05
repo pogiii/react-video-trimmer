@@ -26,7 +26,6 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
     maxEndTime,
   } = usePlayer();
 
-  // ------- Imperative API (stable) -------
   useImperativeHandle(
     ref,
     () => ({
@@ -42,36 +41,47 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
     []
   );
 
-  // ------- Source change handling -------
+
+  useEffect(() => {
+    console.log("maxEndTime", maxEndTime);
+    console.log("minStartTime", minStartTime);
+    console.log("currentTime", currentTime);
+
+    if (maxEndTime < currentTime) {
+      dispatch({ type: 'PAUSE' });
+      dispatch({ type: 'SET_CURRENT_TIME', payload: maxEndTime });
+    }
+
+    if (minStartTime > currentTime) {
+      dispatch({ type: 'PAUSE' });
+      dispatch({ type: 'SET_CURRENT_TIME', payload: minStartTime });
+    }
+  }, [maxEndTime, minStartTime, currentTime, dispatch]);
+
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
 
-    // Reset derived state when src changes
     dispatch({ type: 'SET_READY', payload: false });
     dispatch({ type: 'SET_DURATION', payload: 0 });
     dispatch({ type: 'SET_CURRENT_TIME', payload: 0 });
     dispatch({ type: 'SET_LOADING', payload: !!video });
 
-    // Force the media pipeline to re-evaluate source
     v.load();
   }, [video, dispatch]);
 
-  // ------- Drive play/pause from store -------
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
 
     if (isPlaying) {
       v.play().catch(() => {
-        // Autoplay blocked; reflect actual state from event handlers
       });
     } else {
       v.pause();
     }
   }, [isPlaying]);
 
-  // ------- Apply volume changes -------
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -79,18 +89,15 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
     v.volume = muted ? 0 : volume / 100;
   }, [volume, muted]);
 
-  // ------- Apply external seeks only (avoid fighting playback) -------
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
 
-    // If we’re paused (or scrubbing), allow store to drive the element
     if (v.paused && Math.abs(v.currentTime - currentTime) > 0.04) {
       v.currentTime = currentTime;
     }
   }, [currentTime]);
 
-  // ------- Smooth timeline updates while playing -------
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -109,7 +116,6 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
     };
   }, [isPlaying, dispatch, minStartTime, maxEndTime]);
 
-  // ------- Video event handlers -------
   const handleLoadedMetadata = useCallback(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -149,7 +155,6 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
         src={video ?? undefined}
         preload='metadata'
         playsInline
-        // media events
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
         onPlay={handlePlay}
