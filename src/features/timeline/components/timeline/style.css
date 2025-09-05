@@ -3,13 +3,15 @@
   height: 7rem;
   padding: 0;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .timeline-header {
   height: auto;
   padding: var(--spacing-2) var(--spacing-4);
   gap: var(--spacing-2);
+  border-top-left-radius: var(--border-radius-lg);
+  border-top-right-radius: var(--border-radius-lg);
   background-color: color-mix(
     in srgb,
     var(--surface-color) 40%,

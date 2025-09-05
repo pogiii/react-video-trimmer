@@ -1,13 +1,13 @@
 import { FullscreenIcon, Pause, Play } from 'lucide-react';
 import { AppLayout } from '../components/layouts/app-layout';
-import { ControlButton } from '../features/controls/components/control-button';
+import { Controls } from '../features/controls/';
 import { FileLoader } from '../features/ingest/components/file-loader';
 import { loadFile } from '../features/ingest/lib/load-file';
 import { Player } from '../features/player';
 import { usePlayer } from '../features/player';
 import { Timeline } from '../features/timeline/components/timeline';
 import './App.css';
-import { ControlContainer, VolumeSlider } from '../features/controls';
+import { ControlContainer } from '../features/controls';
 
 function App() {
   const { dispatch, video, currentTime, duration, isPlaying, volume, muted } = usePlayer();
@@ -54,12 +54,12 @@ function App() {
               <Timeline.Title title="Video Title" />
               <ControlContainer>
                 {!isPlaying ? (
-                  <ControlButton icon={<Play />} onClick={handlePlay} />
+                  <Controls.Button icon={<Play />} onClick={handlePlay} />
                 ) : (
-                  <ControlButton icon={<Pause />} onClick={handlePause} />
+                  <Controls.Button icon={<Pause />} onClick={handlePause} />
                 )}
-                <ControlButton icon={<FullscreenIcon/>} onClick={handleFullscreen} />
-                <VolumeSlider 
+                <Controls.Button icon={<FullscreenIcon/>} onClick={handleFullscreen} />
+                <Controls.VolumeSlider 
                   volume={volume} 
                   muted={muted}
                   onVolumeChange={handleVolumeChange} 
