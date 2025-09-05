@@ -9,8 +9,10 @@ import { Timeline } from '../features/timeline/components/timeline';
 import './App.css';
 import { ControlContainer } from '../features/controls';
 
+import { FilmstripPreview } from '../features/timeline/components/filmstrip/preview';
+
 function App() {
-  const { dispatch, video, currentTime, duration, isPlaying, volume, muted } = usePlayer();
+  const { dispatch, video, file, currentTime, duration, isPlaying, volume, muted } = usePlayer();
 
   const handlePlay = () => {
     dispatch({ type: 'PLAY' });
@@ -43,7 +45,8 @@ function App() {
     <AppLayout>
       {!video && (
         <FileLoader whenFileAvailable={(files) => {
-          dispatch({ type: 'LOAD_VIDEO', payload: loadFile(files[0]) ?? '' });
+          const url = loadFile(files[0]) ?? '';
+          dispatch({ type: 'LOAD_VIDEO', payload: { url, file: files[0] } });
         }} />
       )}
       {video && (
@@ -51,14 +54,14 @@ function App() {
           <Player />
           <Timeline.Root>
             <Timeline.Header>
-              <Timeline.Title title="Video Title" />
+              <Timeline.Title title={file?.name ?? ''} />
               <ControlContainer>
                 {!isPlaying ? (
-                  <Controls.Button icon={<Play />} onClick={handlePlay} />
+                  <Controls.Button icon={<Play size={16} />} onClick={handlePlay} />
                 ) : (
-                  <Controls.Button icon={<Pause />} onClick={handlePause} />
+                  <Controls.Button icon={<Pause size={16} />} onClick={handlePause} />
                 )}
-                <Controls.Button icon={<FullscreenIcon/>} onClick={handleFullscreen} />
+                <Controls.Button icon={<FullscreenIcon size={16}/>} onClick={handleFullscreen} />
                 <Controls.VolumeSlider 
                   volume={volume} 
                   muted={muted}
@@ -69,7 +72,7 @@ function App() {
               <Timeline.Time currentTime={currentTime} duration={duration} />
             </Timeline.Header>
             <Timeline.Body>
-              <div>Timeline content will go here</div>
+              {file && <FilmstripPreview file={file} />}
             </Timeline.Body>
           </Timeline.Root>
         </>

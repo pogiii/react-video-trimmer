@@ -4,6 +4,7 @@ import type { PlayerState } from "../../types/player-state";
 
 const initialState: PlayerState = {
   video: null,
+  file: null,
   currentTime: 0,
   duration: 0,
   isPlaying: false,

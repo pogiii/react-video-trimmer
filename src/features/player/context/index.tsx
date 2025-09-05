@@ -11,6 +11,7 @@ export type PlayerContextType = PlayerState & {
 // Initial state
 export const initialPlayerState: PlayerState = {
   video: null,
+  file: null,
   currentTime: 0,
   duration: 0,
   isPlaying: false,
@@ -28,7 +29,8 @@ export const playerReducer = (state: PlayerState, action: PlayerAction): PlayerS
     case 'LOAD_VIDEO':
       return {
         ...state,
-        video: action.payload,
+        video: action.payload.url,
+        file: action.payload.file,
         currentTime: 0,
         duration: 0,
         isPlaying: false,

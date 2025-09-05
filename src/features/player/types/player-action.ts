@@ -1,5 +1,5 @@
 export type PlayerAction = 
-  | { type: 'LOAD_VIDEO'; payload: string }
+  | { type: 'LOAD_VIDEO'; payload: { url: string; file: File } }
   | { type: 'SET_DURATION'; payload: number }
   | { type: 'SET_CURRENT_TIME'; payload: number }
   | { type: 'PLAY' }

@@ -1,5 +1,6 @@
 export type PlayerState = {
   video: string | null;
+  file: File | null;
   currentTime: number;
   duration: number;
   isPlaying: boolean;

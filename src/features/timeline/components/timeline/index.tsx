@@ -9,7 +9,9 @@ const Root = ({ children }: { children: React.ReactNode }) => {
 
 
 const Body = ({ children }: { children: React.ReactNode }) => {
-  return <div className="timeline-body">{children}</div>;
+  return <div className="timeline-body flex justify-center items-center">
+    {children}
+  </div>
 };
 
 
@@ -29,13 +31,13 @@ const Time = ({ currentTime, duration }: TimeProps) => {
   const parsedCurrentTime = formatTimeToMMSS(currentTime);
   const parsedDuration = formatTimeToMMSS(duration);
 
-  return(<div className="timeline-duration-currentTime">
+  return(<div className="timeline-duration-currentTime flex justify-end items-center">
     {parsedCurrentTime}/{parsedDuration}
   </div>)
 }
 
 const Title = ({ title }: { title: string }) => (
-  <div className="timeline-title">{title}</div>
+  <div className="timeline-title flex justify-start items-center">{title}</div>
 )
 
 
