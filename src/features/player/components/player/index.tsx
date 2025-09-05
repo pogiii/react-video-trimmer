@@ -49,12 +49,10 @@ export const Player = forwardRef<PlayerRef>((_, ref) => {
 
     if (maxEndTime < currentTime) {
       dispatch({ type: 'PAUSE' });
-      dispatch({ type: 'SET_CURRENT_TIME', payload: maxEndTime });
     }
 
     if (minStartTime > currentTime) {
       dispatch({ type: 'PAUSE' });
-      dispatch({ type: 'SET_CURRENT_TIME', payload: minStartTime });
     }
   }, [maxEndTime, minStartTime, currentTime, dispatch]);
 

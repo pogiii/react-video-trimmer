@@ -45,6 +45,16 @@ function App() {
 
   const handlePointerInput = useCallback((event: React.FormEvent<HTMLInputElement>) => {
     const newTime = parseFloat(event.currentTarget.value);
+
+    if (newTime < minStartTime) {
+      console.log('newTime < minStartTime', newTime, minStartTime);
+      return;
+    }
+    if (newTime > maxEndTime) {
+      console.log('newTime > maxEndTime', newTime, maxEndTime);
+      return;
+    }
+
     dispatch({ type: 'SET_CURRENT_TIME', payload: newTime });
   }, [dispatch]);
 
