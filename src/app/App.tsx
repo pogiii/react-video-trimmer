@@ -10,9 +10,10 @@ import './App.css';
 import { ControlContainer } from '../features/controls';
 
 import { FilmstripPreview } from '../features/timeline/components/filmstrip/preview';
+import { Pointer } from '../features/timeline/components/pointer';
 
 function App() {
-  const { dispatch, video, file, currentTime, duration, isPlaying, volume, muted } = usePlayer();
+  const { dispatch, video, file, currentTime, duration, isPlaying, volume, muted, maxEndTime, minStartTime } = usePlayer();
 
   const handlePlay = () => {
     dispatch({ type: 'PLAY' });
@@ -30,6 +31,11 @@ function App() {
     dispatch({ type: 'TOGGLE_MUTE' });
   };
 
+  const handlePointerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = parseFloat(event.target.value);    
+    dispatch({ type: 'SET_CURRENT_TIME', payload: newTime });
+  };
+
   const handleFullscreen = () => {
     const videoElement = document.querySelector('video');
     if (videoElement) {
@@ -39,6 +45,14 @@ function App() {
         videoElement.requestFullscreen();
       }
     }
+  };
+
+  const handlePointerStart = () => {
+    dispatch({ type: 'PAUSE' });
+  };
+
+  const handlePointerEnd = () => {
+    dispatch({ type: 'PLAY' });
   };
 
   return (
@@ -73,6 +87,17 @@ function App() {
             </Timeline.Header>
             <Timeline.Body>
               {file && <FilmstripPreview file={file} />}
+              <Pointer 
+                min={minStartTime} 
+                max={maxEndTime} 
+                step={0.05} 
+                value={currentTime} 
+                onChange={handlePointerChange} 
+                onMouseDown={handlePointerStart}
+                onMouseUp={handlePointerEnd}
+                onTouchStart={handlePointerStart}
+                onTouchEnd={handlePointerEnd}
+              />
             </Timeline.Body>
           </Timeline.Root>
         </>

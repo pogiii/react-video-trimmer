@@ -14,7 +14,7 @@
   --secondary-color: light-dark(#16a34a, #4ade80);
   --accent-color: light-dark(#7c3aed, #a78bfa);
 
-  --error-color: light-dark(#dc2626, #f87171);
+  --error-color: #dc2626;
   --success-color: light-dark(#15803d, #22c55e);
   --warning-color: light-dark(#ca8a04, #facc15);
   --info-color: light-dark(#0284c7, #38bdf8);

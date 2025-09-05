@@ -1,0 +1,72 @@
+/* Base: the range overlays your timeline */
+input[type='range'].timeline-pointer {
+  position: absolute;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  width: 100%;
+  height: 100%; /* set this from your timeline height */
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: ew-resize;
+
+  /* allow custom styling in WebKit */
+  -webkit-appearance: none;
+  appearance: none;
+
+  /* nicer interactions */
+  user-select: none;
+  touch-action: manipulation; /* allows pan-x for slider, prevents zoom */
+  outline: none;
+}
+
+/* ---------- Firefox ---------- */
+input[type='range'].timeline-pointer::-moz-range-track {
+  background: transparent;
+  height: 100%;
+  border: 0;
+}
+input[type='range'].timeline-pointer::-moz-range-progress {
+  background: none;
+}
+input[type='range'].timeline-pointer::-moz-range-thumb {
+  width: 3px;
+  height: 100%; /* explicit px works best */
+  border: 0;
+  border-radius: 0;
+  background: var(--error-color);
+  cursor: grab;
+  transition: transform 0.1s ease;
+}
+input[type='range'].timeline-pointer:active::-moz-range-thumb {
+  cursor: grabbing;
+}
+
+/* ---------- Chrome / Safari (WebKit) ---------- */
+input[type='range'].timeline-pointer::-webkit-slider-runnable-track {
+  background: transparent; /* hide default bar */
+  height: 100%;
+  border: 0;
+}
+input[type='range'].timeline-pointer::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 3px;
+  height: 100%; /* make it full height */
+  background: var(--error-color);
+  border: 0;
+  border-radius: 0;
+  cursor: grab;
+  /* Align thumb to track—no vertical offset */
+  margin-top: 0; /* important for Safari */
+  transition: transform 0.1s ease;
+}
+input[type='range'].timeline-pointer:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+/* Optional hover/active feedback shared */
+input[type='range'].timeline-pointer:hover::-webkit-slider-thumb,
+input[type='range'].timeline-pointer:hover::-moz-range-thumb {
+  transform: scaleX(1.1);
+}
