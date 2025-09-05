@@ -11,9 +11,6 @@ import { ControlContainer } from '../features/controls';
 
 import { FilmstripPreview } from '../features/timeline/components/filmstrip/preview';
 import { Pointer } from '../features/timeline/components/pointer';
-import { debounce } from '../utils/debounce';
-import { useState } from 'react';
-import { Trimmer } from '../features/timeline/components/trimmer';
 
 function App() {
   const {
@@ -28,9 +25,6 @@ function App() {
     maxEndTime,
     minStartTime,
   } = usePlayer();
-
-  const [minValue, setMinValue] = useState(30);
-  const [maxValue, setMaxValue] = useState(40);
 
   const handlePlay = () => {
     dispatch({ type: 'PLAY' });
@@ -48,8 +42,8 @@ function App() {
     dispatch({ type: 'TOGGLE_MUTE' });
   };
 
-  const handlePointerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = parseFloat(event.target.value);
+    const handlePointerInput = (event: React.FormEvent<HTMLInputElement>) => {
+    const newTime = parseFloat(event.currentTarget.value);
     dispatch({ type: 'SET_CURRENT_TIME', payload: newTime });
   };
 
@@ -64,13 +58,13 @@ function App() {
     }
   };
 
-  const handlePointerStart = debounce(() => {
+  const handlePointerStart = () => {
     dispatch({ type: 'PAUSE' });
-  }, 20);
+  };
 
-  const handlePointerEnd = debounce(() => {
+  const handlePointerEnd = () => {
     dispatch({ type: 'PLAY' });
-  }, 20);
+  };
 
   return (
     <AppLayout>
@@ -122,7 +116,7 @@ function App() {
                     max={maxEndTime}
                     step={0.05}
                     value={currentTime}
-                    onChange={handlePointerChange}
+                    onInput={handlePointerInput}
                     onMouseDown={handlePointerStart}
                     onMouseUp={handlePointerEnd}
                     onTouchStart={handlePointerStart}
