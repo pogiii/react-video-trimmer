@@ -167,15 +167,6 @@ The filmstrip feature uses an intelligent algorithm that:
 
 Robust client-side validation ensures users get immediate feedback about file compatibility, supporting both extension-based and MIME-type-based detection.
 
-## Future Enhancements
-
-While currently focused on trimming interface and preview, the architecture is designed to support additional features like:
-
-- Actual video export functionality
-- Multiple trim ranges
-- Basic video effects
-- Batch processing capabilities
-
 ## Contributing
 
 The codebase follows modern React patterns and is well-documented with TypeScript interfaces. The modular architecture makes it easy to add new features or modify existing ones without affecting other parts of the application.
