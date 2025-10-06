@@ -4,6 +4,8 @@ import { FileDragArea } from '../../../../components/ui/file-drag-area';
 import { validateVideoFiles } from '../../lib/file-validation';
 import { useState, useCallback } from 'react';
 
+/// Check
+
 type FileLoaderProps = {
   whenFileAvailable?: (files: FileList) => void;
 };
